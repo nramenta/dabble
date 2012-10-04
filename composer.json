@@ -1,6 +1,6 @@
 {
     "name": "dabble/dabble",
-    "description": "A lightweight wrapper and helpers for MySQLi",
+    "description": "Lightweight wrapper and helpers for MySQLi",
     "keywords": ["database", "mysql", "mysqli"],
     "type": "library",
     "license": "MIT",
