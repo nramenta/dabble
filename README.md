@@ -44,7 +44,25 @@ foreach ($posts as $post) {
 }
 ```
 
-The `Result` object returned from `query()` implements `Iterator` and `Count`.
+Every parameter binding will be escaped using the `mysqli_real_escape_string()`
+function. String parameters will be properly quoted before inserted into the
+query while `true` and `false` will be converted into `1` and `0` respectively.
+The `Result` object returned from `query()` implements `Iterator` and
+`Count`.
+
+Parameters in the form of arrays will automatically be transformed and inserted
+into the query as a comma separated list. The following call:
+
+```php
+<?php
+$posts = $db->query('SELECT * FROM `posts` WHERE `id` IN (:search)', array(
+    'search' => array(12, 24, 42, 68, 75)
+));
+```
+
+will result in the execution of:
+
+    SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75)
 
 ## Optional SQL fragments
 
