@@ -121,7 +121,8 @@ Fetches a row or a single column within a row:
 $data = $result->fetch($row_number, $column);
 ```
 
-This method forms the basis of all fetch_* methods.
+This method forms the basis of all fetch_* methods. All forms of fetch_ advances
+the internal row pointer to the next row.
 
 ### fetch_one
 
@@ -132,7 +133,7 @@ Fetches the next row:
 $next_row = $result->fetch_one();
 ```
 
-Pass a column name as argument to return a single column of the next row:
+Pass a column name as argument to return a single column from the next row:
 
 ```php
 <?php
