@@ -46,7 +46,8 @@ class Result implements \Countable, \Iterator
     }
 
     /**
-     * Fetches a row or a single column within a row.
+     * Fetches a row or a single column within a row. Returns null if there are
+     * no more rows in the result.
      *
      * @param int    $row    The row number (optional)
      * @param string $column The column name (optional)
@@ -56,7 +57,7 @@ class Result implements \Countable, \Iterator
     public function fetch($row = null, $column = null)
     {
         if (!$this->count) {
-            return false;
+            return null;
         }
 
         if (isset($row)) {
