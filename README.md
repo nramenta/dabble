@@ -121,8 +121,9 @@ Fetches a row or a single column within a row:
 $data = $result->fetch($row_number, $column);
 ```
 
-This method forms the basis of all fetch_* methods. All forms of fetch_ advances
-the internal row pointer to the next row.
+This method forms the basis of all fetch_ methods. All forms of fetch_ advances
+the internal row pointer to the next row. `null` will be returned when there are
+no more rows to be fetched.
 
 ### fetch_one
 
