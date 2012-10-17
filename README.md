@@ -25,6 +25,7 @@ The following is a typical Dabble usage:
 ```php
 <?php
 require_once 'path/to/Dabble/Database.php';
+require_once 'path/to/Dabble/Result.php';
 
 use Dabble\Database;
 
@@ -66,11 +67,10 @@ will result in the execution of:
 
 ## Optional SQL fragments
 
-SQL passed to the `query()` method, CRUD helpers methods, and all methods of a
-`Result` object where applicable may contain optional SQL fragments delimited by
-`[` and `]` characters. These fragments will be removed from the final SQL if
-not all placeholders used inside them exists inside their parameter bindings.
-This results in a more coherent way of building queries:
+SQL passed to the `query()` method and CRUD helper methods may contain optional
+SQL fragments delimited by `[` and `]`. These fragments will be removed from the
+final SQL if not all placeholders used inside them exist inside the parameter
+binding. This results in a more coherent way of building queries:
 
 ```php
 <?php
@@ -87,7 +87,7 @@ $posts = $db->query(
 
 In the above example, the `[AND title = :title]` part will be removed if
 `$params['title']` does not exist. You can nest as many of these optional SQL
-fragments as you need. Any unmatched `[` and `]` delimiters is considered to be
+fragments as you need. Unbalanced `[` and `]` delimiters is considered to be
 an error and will yield a `RuntimeException`.
 
 ## Transactions
@@ -242,28 +242,36 @@ echo 'Last insert id = ' . $id;
 ```php
 <?php
 $db->update('posts', array(
-    'title' => 'Lets change the title',
-), 'id = :id', array('id' => 42));
+        'title' => 'Lets change the title',
+    ),
+    '`id` = :id AND `published` = :published',
+    array('id' => 42, 'published' => true)
+);
 ```
 
 ### Upsert
+
+Upsert is MySQL's INSERT INTO ... ON DUPLICATE KEY UPDATE ... construct:
 
 ```php
 <?php
 $db->upsert('posts', array(
     'id' => 1,
     'title' => 'First Post!'
-), 'title = :title', array('title' => 'Update: First Post!'));
+), '`title` = :title', array('title' => 'Update: First Post!'));
 ```
 
 ### Delete
 
 ```php
 <?php
-$db->delete('posts', 'published = :published', array('published' => true));
+$db->delete('posts', '`published` = :published', array('published' => true));
 ```
 
 ### Replace
+
+Replace is MySQL's extension of SQL which is equivalent to insert or delete and
+then re-insert if row exists:
 
 ```php
 <?php
