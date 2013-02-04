@@ -14,7 +14,7 @@ namespace Dabble;
 class Result implements \Countable, \Iterator
 {
     protected $result;
-    protected $count;
+    protected $num_rows;
     protected $row;
 
     /**
@@ -25,8 +25,8 @@ class Result implements \Countable, \Iterator
     public function __construct($result)
     {
         $this->result = $result;
-        $this->count  = mysqli_num_rows($result);
-        $this->row    = 0;
+        $this->num_rows = mysqli_num_rows($result);
+        $this->row = 0;
     }
 
     /**
@@ -38,7 +38,7 @@ class Result implements \Countable, \Iterator
      */
     public function seek($row = 0)
     {
-        if (is_int($row) && $row >= 0 && $row <= $this->count - 1) {
+        if (is_int($row) && $row >= 0 && $row <= $this->num_rows - 1) {
             return mysqli_data_seek($this->result, $row);
         } else {
             return false;
@@ -56,7 +56,7 @@ class Result implements \Countable, \Iterator
      */
     public function fetch($row = null, $column = null)
     {
-        if (!$this->count) {
+        if (!$this->num_rows) {
             return null;
         }
 
@@ -184,7 +184,7 @@ class Result implements \Countable, \Iterator
     public function last($column = null)
     {
         $pos  = $this->row;
-        $last = $this->fetch($this->count - 1, $column);
+        $last = $this->fetch($this->num_rows - 1, $column);
         $this->rewind($pos);
         return $last;
     }
@@ -196,7 +196,7 @@ class Result implements \Countable, \Iterator
      */
     public function count()
     {
-        return $this->count;
+        return $this->num_rows;
     }
 
     /**
@@ -250,7 +250,7 @@ class Result implements \Countable, \Iterator
      */
     public function valid()
     {
-        return $this->row < $this->count;
+        return $this->row < $this->num_rows;
     }
 
     /**
