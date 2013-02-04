@@ -35,7 +35,7 @@ class Database
     /**
      * Object constructor.
      *
-     * @param string $host     Server connection string
+     * @param string $host     Server hostname or IP address
      * @param string $username Server username
      * @param string $password Server password
      * @param string $database Database name
