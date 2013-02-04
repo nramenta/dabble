@@ -45,6 +45,19 @@ foreach ($posts as $post) {
 }
 ```
 
+The full constructor parameters are:
+- `$host`: Server host.
+- `$username`: Server username.
+- `$password`: Server password.
+- `$database`: Database name.
+- `$charset`: Server connection character set; defaults to utf8.
+- `$port`: Server connection port; defaults to 3306
+- `$socket`: Server connection socket, optional.
+
+While the `query()` method's parameters are:
+- `$sql`: SQL string.
+- `$bindings: Array of key-value bindings.
+
 Every parameter binding will be escaped using the `mysqli_real_escape_string()`
 function. String parameters will be properly quoted before inserted into the
 query while `true` and `false` will be converted into `1` and `0` respectively.
@@ -52,7 +65,7 @@ The `Result` object returned from `query()` implements `Iterator` and
 `Count`. Errors will yield a `RuntimeException`.
 
 Parameters in the form of arrays will automatically be transformed and inserted
-into the query as a comma separated list. The following call:
+into the query as a comma separated list. The following:
 
 ```php
 <?php
@@ -61,9 +74,11 @@ $posts = $db->query('SELECT * FROM `posts` WHERE `id` IN (:search)', array(
 ));
 ```
 
-will result in the execution of:
+Will execute the SQL:
 
-    SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75)
+```
+SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75)
+```
 
 ## Optional SQL fragments
 
