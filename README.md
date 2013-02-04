@@ -51,7 +51,7 @@ The full constructor parameters are:
 - `$password`: Server password.
 - `$database`: Database name.
 - `$charset`: Server connection character set; defaults to utf8.
-- `$port`: Server connection port; defaults to 3306
+- `$port`: Server connection port; defaults to 3306.
 - `$socket`: Server connection socket, optional.
 
 While the `query()` method's parameters are:
