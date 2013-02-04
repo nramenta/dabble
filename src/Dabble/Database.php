@@ -497,7 +497,7 @@ class Database
                         "`$column IS NULL`" : "`$column` = :$column";
                     $args[$column] = $value;
                 }
-                $update = implode(' AND ', $updates);
+                $update = implode(', ', $updates);
             }
             $sql .= ' ON DUPLICATE KEY UPDATE ' . $update;
         }
