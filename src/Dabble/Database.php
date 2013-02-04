@@ -73,15 +73,16 @@ class Database
         if (mysqli_connect_errno()) {
             throw new \RuntimeException(sprintf(
                 'could not connect to %s : (%d) %s',
-                $this->database,
-                mysqli_connect_errno(), mysqli_connect_error()));
+                $this->database, mysqli_connect_errno(), mysqli_connect_error()
+            ));
         }
 
         if (!mysqli_set_charset($this->link, $this->charset)) {
             throw new \RuntimeException(sprintf(
                 'error loading character set %s : (%d) %s',
-                $this->charset,
-                mysqli_errno($this->link), mysqli_error($this->link)));
+                $this->charset, mysqli_errno($this->link),
+                mysqli_error($this->link)
+            ));
         }
 
         return true;
