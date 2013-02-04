@@ -429,8 +429,7 @@ class Database
      *
      * @return bool Boolean true on success, false otherwise
      */
-    public function update($table, array $data, $where = null,
-        $args = array())
+    public function update($table, array $data, $where = null, $args = array())
     {
         $updates = array();
 
