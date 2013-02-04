@@ -77,7 +77,7 @@ $posts = $db->query('SELECT * FROM `posts` WHERE `id` IN (:search)', array(
 Will execute the SQL:
 
 ```
-SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75)
+SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75);
 ```
 
 ## Optional SQL fragments
@@ -292,8 +292,7 @@ echo 'Last insert id = ' . $id;
 Will execute the SQL:
 
 ```
-INSERT INTO `posts` (`title`, `body`) VALUES ('This is a new post!',
-'How convenient.')
+INSERT INTO `posts` (`title`, `body`) VALUES ('This is a new post!', 'How convenient.');
 ```
 
 To manually get the last insert ID:
@@ -332,8 +331,7 @@ $db->update('posts',
 Will execute the SQL:
 
 ```
-UPDATE `posts` SET `title` = 'Lets change the title' WHERE `id` = 42 AND
-`published` = 1
+UPDATE `posts` SET `title` = 'Lets change the title' WHERE `id` = 42 AND `published` = 1;
 ```
 
 The `$where` parameter can also be an array of simple key-value comparisons. The
@@ -376,8 +374,7 @@ $db->upsert('posts',
 Will execute the SQL:
 
 ```
-INSERT INTO `posts` (`id`, `title`) VALUES (1, 'First Post!') ON DUPLICATE KEY
-UPDATE `title` = 'Update: First Post!'
+INSERT INTO `posts` (`id`, `title`) VALUES (1, 'First Post!') ON DUPLICATE KEY UPDATE `title` = 'Update: First Post!';
 ```
 
 As in the `Database::update()` method, the `$duplicate` parameter can also be an
@@ -413,7 +410,7 @@ $db->delete('posts', '`published` = :published', array('published' => true));
 Will execute the SQL:
 
 ```
-DELETE `posts` WHERE `published` = 1
+DELETE `posts` WHERE `published` = 1;
 ```
 
 As in the `Database::update()` method, the `$where` parameter can also be an
@@ -446,7 +443,7 @@ $db->replace('posts',
 Will execute the SQL:
 
 ```
-REPLACE INTO `posts` (`id`, `title`, `body`) VALUES (1, 'Override', 'test.')
+REPLACE INTO `posts` (`id`, `title`, `body`) VALUES (1, 'Override', 'test.');
 ```
 
 ### Truncate
@@ -468,7 +465,7 @@ Will execute the SQL:
 
 ```
 TRUNCATE `posts`;
-ALTER TABLE `posts` AUTO_INCREMENT = 1
+ALTER TABLE `posts` AUTO_INCREMENT = 1;
 ```
 
 ## License
