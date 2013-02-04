@@ -24,7 +24,7 @@ class Result implements \Countable, \Iterator
      *
      * @param mixed $result Resource returned by db::query or mysqli_query
      */
-    public function __construct($result, $found_rows = null)
+    public function __construct(\MySQLi_Result $result, $found_rows = null)
     {
         $this->result = $result;
         $this->row = 0;

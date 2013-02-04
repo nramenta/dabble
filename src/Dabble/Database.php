@@ -182,7 +182,7 @@ class Database
      * Escapes data using mysqli_escape_string.
      *
      * @param mixed $data   The data to be escaped
-     * @param bool  $sqlize Flag to format data as SQL-friendly
+     * @param bool  $sqlize Format data as SQL-friendly, defaults to false
      *
      * @return mixed escaped data
      */
@@ -239,7 +239,7 @@ class Database
      *
      * @return string
      */
-    public function strip($sql, $keys)
+    public function strip($sql, array $keys)
     {
         $pattern = '/:([a-zA-Z_][a-zA-Z0-9_]*)\b/';
         $s = array();
@@ -291,7 +291,7 @@ class Database
      *
      * @return string
      */
-    public function format($sql, $bindings = array())
+    public function format($sql, array $bindings = array())
     {
         static $strtr;
         $strtr = function($a) {
@@ -335,7 +335,7 @@ class Database
      *
      * @return Result|bool
      */
-    public function query($sql, $bindings = array())
+    public function query($sql, array $bindings = array())
     {
         $this->open();
 
@@ -429,7 +429,8 @@ class Database
      *
      * @return bool Boolean true on success, false otherwise
      */
-    public function update($table, array $data, $where = null, $args = array())
+    public function update($table, array $data, $where = null,
+        array $args = array())
     {
         $updates = array();
 
@@ -472,7 +473,7 @@ class Database
      * @return bool Boolean true on success, false otherwise
      */
     public function upsert($table, array $data, $duplicate = null,
-        $args = array(), &$insert_id = null)
+        array $args = array(), &$insert_id = null)
     {
         $columns = array();
         $values  = array();
@@ -517,7 +518,7 @@ class Database
      *
      * @return bool Boolean true on success, false otherwise
      */
-    public function delete($table, $where = null, $args = array())
+    public function delete($table, $where = null, array $args = array())
     {
         if (isset($where)) {
             if (is_array($where)) {
@@ -547,7 +548,7 @@ class Database
      *
      * @return bool Boolean true on success, false otherwise
      */
-    public function replace($table, $data = array(), &$insert_id = null)
+    public function replace($table, array $data, &$insert_id = null)
     {
         $columns = array();
         $values  = array();
@@ -593,7 +594,7 @@ class Database
     /**
      * Alias for `query()`.
      */
-    public function __invoke($sql = null, $bindings = array())
+    public function __invoke($sql = null, array $bindings = array())
     {
         return isset($sql) ? $this->query($sql, $bindings) : $this->link;
     }
