@@ -90,6 +90,8 @@ class Database
     /**
      * Selects a different database than the one specified on construction.
      *
+     * @param string $database Database name to switch to
+     *
      * @return bool Boolean true on success, false otherwise
      */
     public function select_db($database)
