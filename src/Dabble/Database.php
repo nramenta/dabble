@@ -350,7 +350,13 @@ class Database
         $result = mysqli_query($this->link, $sql);
 
         if (is_object($result)) {
-            return new Result($result);
+            if (preg_match('/^SELECT\s+SQL_CALC_FOUND_ROWS/i', $sql)) {
+                $res = $this->query('SELECT FOUND_ROWS() AS `total`');
+                $found_rows = $res->fetch_one('total');
+            } else {
+                $found_rows = null;
+            }
+            return new Result($result, $found_rows);
         } else {
             if ($result) {
                 $this->affected_rows = mysqli_affected_rows($this->link);
