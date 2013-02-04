@@ -56,7 +56,7 @@ The full constructor parameters are:
 
 While the `query()` method's parameters are:
 - `$sql`: SQL string.
-- `$bindings: Array of key-value bindings.
+- `$bindings`: Array of key-value bindings.
 
 Every parameter binding will be escaped using the `mysqli_real_escape_string()`
 function. String parameters will be properly quoted before inserted into the
