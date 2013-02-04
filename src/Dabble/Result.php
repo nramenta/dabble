@@ -14,8 +14,9 @@ namespace Dabble;
 class Result implements \Countable, \Iterator
 {
     protected $result;
-    protected $num_rows;
     protected $row;
+
+    public $num_rows;
 
     /**
      * Object constructor.
