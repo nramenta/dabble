@@ -353,7 +353,7 @@ Upsert is MySQL's INSERT INTO ... ON DUPLICATE KEY UPDATE ... construct. Returns
 Parameters:
 - `$table`: The table name.
 - `$data`: The row array to insert.
-- `$duplicate`: Duplicate-clause; can contain placeholders.
+- `$update`: Update-clause; can contain placeholders.
 - `$args`: Array of key-value bindings for the duplicate-clause.
 - `$insert_id`: The last insert ID, optional.
 
@@ -377,7 +377,7 @@ Will execute the SQL:
 INSERT INTO `posts` (`id`, `title`) VALUES (1, 'First Post!') ON DUPLICATE KEY UPDATE `title` = 'Update: First Post!';
 ```
 
-As in the `Database::update()` method, the `$duplicate` parameter can also be an
+As in the `Database::update()` method, the `$update` parameter can also be an
 array of simple key-value comparisons. The following is equivalent to the above:
 
 ```php

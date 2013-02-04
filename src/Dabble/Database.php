@@ -467,13 +467,13 @@ class Database
      *
      * @param string $table     Table name
      * @param array  $data      Array of column-value data to be updated
-     * @param string $duplicate Duplicate-clause; can contain placeholders
-     * @param array  $update    Parameters for the duplicate-clause
+     * @param string $update    Update-clause; can contain placeholders
+     * @param array  $args      Parameters for the update-clause
      * @param int    $insert_id Last inserted id, if available (optional)
      *
      * @return bool Boolean true on success, false otherwise
      */
-    public function upsert($table, array $data, $duplicate = null,
+    public function upsert($table, array $data, $update = null,
         array $args = array(), &$insert_id = null)
     {
         $columns = array();
@@ -489,17 +489,17 @@ class Database
         $sql = sprintf('INSERT INTO `%s` (%s) VALUES (%s)',
             $table, implode(',', $columns), implode(',', $values));
 
-        if (isset($duplicate)) {
-            if (is_array($duplicate)) {
+        if (isset($update)) {
+            if (is_array($update)) {
                 $updates = array();
-                foreach ($duplicate as $column => $value) {
+                foreach ($update as $column => $value) {
                     $updates[] = is_null($value) ?
                         "`$column IS NULL`" : "`$column` = :$column";
                     $args[$column] = $value;
                 }
-                $duplicate = implode(' AND ', $updates);
+                $update = implode(' AND ', $updates);
             }
-            $sql .= ' ON DUPLICATE KEY UPDATE ' . $duplicate;
+            $sql .= ' ON DUPLICATE KEY UPDATE ' . $update;
         }
 
         if ($this->query($sql, array_merge($bindings, $args))) {
