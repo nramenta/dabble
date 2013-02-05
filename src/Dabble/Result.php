@@ -17,19 +17,17 @@ class Result implements \Countable, \Iterator
     protected $row;
 
     public $num_rows;
-    public $found_rows;
 
     /**
      * Object constructor.
      *
      * @param mixed $result Resource returned by db::query or mysqli_query
      */
-    public function __construct(\MySQLi_Result $result, $found_rows = null)
+    public function __construct(\MySQLi_Result $result)
     {
         $this->result = $result;
         $this->row = 0;
         $this->num_rows = mysqli_num_rows($result);
-        $this->found_rows = isset($found_rows) ? $found_rows : $this->num_rows;
     }
 
     /**

@@ -351,12 +351,7 @@ class Database
         $result = mysqli_query($this->link, $sql);
 
         if (is_object($result)) {
-            if (preg_match('/^SELECT\s+SQL_CALC_FOUND_ROWS/i', $sql)) {
-                $found_rows = $res->found_rows();
-            } else {
-                $found_rows = null;
-            }
-            return new Result($result, $found_rows);
+            return new Result($result);
         } else {
             if ($result) {
                 $this->affected_rows = mysqli_affected_rows($this->link);
