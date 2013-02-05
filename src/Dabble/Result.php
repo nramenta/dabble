@@ -14,9 +14,8 @@ namespace Dabble;
 class Result implements \Countable, \Iterator
 {
     protected $result;
+    protected $num_rows;
     protected $row;
-
-    public $num_rows;
 
     /**
      * Object constructor.
@@ -191,13 +190,23 @@ class Result implements \Countable, \Iterator
     }
 
     /**
-     * Countable interface implementation
+     * Countable interface implementation.
      *
      * @return int The number of rows in the result
      */
     public function count()
     {
         return $this->num_rows;
+    }
+
+    /**
+     * Alias of count().
+     *
+     * @return int The number of rows in the result
+     */
+    public function num_rows()
+    {
+        return $this->count();
     }
 
     /**
