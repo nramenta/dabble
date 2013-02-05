@@ -352,8 +352,7 @@ class Database
 
         if (is_object($result)) {
             if (preg_match('/^SELECT\s+SQL_CALC_FOUND_ROWS/i', $sql)) {
-                $res = $this->query('SELECT FOUND_ROWS() AS `total`');
-                $found_rows = $res->fetch_one('total');
+                $found_rows = $res->found_rows();
             } else {
                 $found_rows = null;
             }
@@ -369,6 +368,19 @@ class Database
             }
             return $result;
         }
+    }
+
+    /**
+     * Returns the number of FOUND_ROWS() from the last query.
+     *
+     * @param int
+     */
+    public function found_rows()
+    {
+        $result = $this->query('SELECT FOUND_ROWS() AS `total`');
+        $found_rows = $result->fetch_one('total');
+        $result->free();
+        return $found_rows;
     }
 
     /**
