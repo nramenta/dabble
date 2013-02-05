@@ -525,7 +525,7 @@ class Database
             if (is_array($where)) {
                 $conditions = array();
                 foreach ($where as $column => $value) {
-                    $conditions = is_null($value) ?
+                    $conditions[] = is_null($value) ?
                         "`$column` IS NULL" : "`$column` = :$column";
                     $args[$column] = $value;
                 }
