@@ -25,8 +25,8 @@ class Result implements \Countable, \Iterator
     public function __construct(\MySQLi_Result $result)
     {
         $this->result = $result;
-        $this->row = 0;
         $this->num_rows = mysqli_num_rows($result);
+        $this->row = 0;
     }
 
     /**
