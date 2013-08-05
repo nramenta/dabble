@@ -412,7 +412,7 @@ $db->delete('posts', '`published` = :published', array('published' => true));
 Will execute the SQL:
 
 ```
-DELETE `posts` WHERE `published` = 1;
+DELETE FROM `posts` WHERE `published` = 1;
 ```
 
 As in the `Database::update()` method, the `$where` parameter can also be an
