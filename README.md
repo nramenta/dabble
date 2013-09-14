@@ -157,6 +157,19 @@ $posts = $db->query('SELECT * FROM `posts`');
 echo 'This result has ' . $posts->num_rows() . ' rows.';
 ```
 
+### fetch_fields
+
+Returns rows of field information in a result set:
+
+```php
+<?php
+$fields = $result->fetch_fields();
+```
+
+Pass `true` as argument if you want each field information returned as an
+associative array instead of an object. The default is to return each as an
+object, exactly like the `mysqli_fetch_fields` function.
+
 ### fetch
 
 Fetches a row or a single column within a row:

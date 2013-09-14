@@ -46,6 +46,25 @@ class Result implements \Countable, \Iterator
     }
 
     /**
+     * Return rows of field information in a result set. This function is a
+     * basically a wrapper on the native mysqli_fetch_fields function.
+     *
+     * @param bool $as_array Return each field info as array; defaults to false
+     *
+     * @return array Array of field information each as an associative array
+     */
+    public function fetch_fields($as_array = false)
+    {
+        if ($as_array) {
+            return array_map(function($object) {
+                return (array) $object;
+            }, mysqli_fetch_fields($this->result));
+        } else {
+            return mysqli_fetch_fields($this->result);
+        }
+    }
+
+    /**
      * Fetches a row or a single column within a row. Returns null if there are
      * no more rows in the result.
      *
