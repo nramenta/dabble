@@ -129,6 +129,30 @@ class Result implements \Countable, \Iterator
     }
 
     /**
+     * Returns all rows at once, transposed as an array of arrays. Instead of
+     * returning rows of columns, this method returns columns of rows.
+     *
+     * @param string $column The column name to use as keys (optional)
+     *
+     * @return mixed A transposed array of arrays
+     */
+    public function fetch_transpose($column = null)
+    {
+        $keys = isset($column) ? $this->fetch_all($column) : array();
+        $rows = array();
+        $pos  = $this->row;
+        foreach ($this as $row) {
+            foreach ($row as $key => $value) {
+                $rows[$key][] = $value;
+            }
+        }
+        $this->rewind($pos);
+        return empty($keys) ? $rows : array_map(function($values) use ($keys) {
+            return array_combine($keys, $values);
+        }, $rows);
+    }
+
+    /**
      * Returns all rows at once as key-value pairs.
      *
      * @param string $key    The column name to use as keys

@@ -215,6 +215,22 @@ Pass a column name as argument to return an array of scalar column values:
 $all_tags = $posts->fetch_all('tags');
 ```
 
+### fetch_transpose
+
+Returns all rows at once, transposed as an array of arrays:
+
+```php
+<?php
+$plan_details = $plans->fetch_transpose();
+```
+
+Transposing a result set of X rows each with Y columns will result in an array
+of Y rows each with X columns.
+
+Pass a column name as argument to return each column as an associative array
+with keys taken from values of the provided column. If not provided, the keys
+will be numeric starting from zero.
+
 ### fetch_pairs
 
 Returns all rows at once as key-value pairs using the column in the first
