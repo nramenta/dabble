@@ -14,8 +14,10 @@ namespace Dabble;
 class Result implements \Countable, \Iterator
 {
     protected $result;
-    protected $num_rows;
     protected $row;
+
+    public $num_rows;
+    public $found_rows;
 
     /**
      * Object constructor.
@@ -25,8 +27,9 @@ class Result implements \Countable, \Iterator
     public function __construct(\MySQLi_Result $result)
     {
         $this->result = $result;
-        $this->num_rows = mysqli_num_rows($result);
         $this->row = 0;
+
+        $this->num_rows = mysqli_num_rows($result);
     }
 
     /**
@@ -243,7 +246,7 @@ class Result implements \Countable, \Iterator
     }
 
     /**
-     * Alias of count().
+     * Alias of count(). Deprecated.
      *
      * @return int The number of rows in the result
      */

@@ -82,23 +82,6 @@ Will execute the SQL:
 SELECT * FROM `posts` WHERE `id` IN (12,24,42,68,75);
 ```
 
-### found_rows
-
-If you use `SQL_CALC_FOUND_ROWS` in your SELECT queries, you can find the number
-of rows the result would have returned without the LIMIT clause:
-
-```php
-<?php
-$posts = $db->query(
-    'SELECT SQL_CALC_FOUND_ROWS * FROM `posts` LIMIT 10 OFFSET 0'
-);
-echo 'Showing ' . $posts->num_rows() . ' posts out of ' . $db->found_rows();
-```
-
-This is very useful for things like paginations. If your query does not use
-`SQL_CALC_FOUND_ROWS`, accessing `Database::found_rows()` will give you the same
-number as `Result::num_rows()`.
-
 ## Optional SQL fragments
 
 SQL passed to the `query()` method and CRUD helper methods may contain optional
@@ -149,13 +132,31 @@ Any SQL errors between `begin()` and `commit()` will yield a `RuntimeException`.
 ### num_rows
 
 Even though the `Result` object implements `Countable`, the number of rows is
-also available as a method:
+also available as a public property:
 
 ```php
 <?php
 $posts = $db->query('SELECT * FROM `posts`');
-echo 'This result has ' . $posts->num_rows() . ' rows.';
+echo 'This result has ' . $posts->num_rows . ' rows.';
 ```
+
+### found_rows
+
+If you use `SQL_CALC_FOUND_ROWS` in your SELECT queries, you can find the number
+of rows the result would have returned *without* the LIMIT clause:
+
+```php
+<?php
+$posts = $db->query(
+    'SELECT SQL_CALC_FOUND_ROWS * FROM `posts` LIMIT 10 OFFSET 0'
+);
+echo 'Showing ' . $posts->num_rows . ' posts out of ' . $posts->found_rows;
+```
+
+This is very useful for things like paginations. If your query does not use
+`SQL_CALC_FOUND_ROWS`, accessing `Result::$found_rows` will give you the same
+number as `Result::$num_rows`.
+
 
 ### fetch_fields
 
