@@ -19,6 +19,11 @@ class Result implements \Countable, \Iterator
     public $num_rows;
     public $found_rows;
 
+    public $limit;
+    public $offset;
+    public $num_pages;
+    public $page;
+
     /**
      * Object constructor.
      *

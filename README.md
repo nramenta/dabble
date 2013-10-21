@@ -157,6 +157,18 @@ This is very useful for things like paginations. If your query does not use
 `SQL_CALC_FOUND_ROWS`, accessing `Result::$found_rows` will give you the same
 number as `Result::$num_rows`.
 
+### Pagination
+
+If you use `SQL_CALC_FOUND_ROWS` along with a `LIMIT` and `OFFSET` clause, you
+can get the total number of pages and the current page:
+
+```php
+<?php
+$posts = $db->query(
+    'SELECT SQL_CALC_FOUND_ROWS * FROM `posts` LIMIT 10 OFFSET 10'
+);
+echo 'Page ' . $posts->page . ' out of ' . $posts->num_pages . ' total pages.';
+```
 
 ### fetch_fields
 

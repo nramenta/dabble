@@ -357,6 +357,24 @@ class Database
             } else {
                 $res->found_rows = $res->num_rows;
             }
+            if (preg_match('/\s+LIMIT\s+(\d+)\s+OFFSET\s+(\d+)/i', $sql, $match)) {
+                $res->limit     = $match[1];
+                $res->offset    = $match[2];
+                $res->num_pages = ceil($res->found_rows / $res->limit);
+                $res->page      = floor($res->offset / $res->limit) + 1;
+            } elseif (preg_match('/\s+LIMIT\s+(\d+)\s*,\s*(\d+)?/i', $sql, $match)) {
+                $res->limit     = $match[2];
+                $res->offset    = $match[1];
+                $res->num_pages = ceil($res->found_rows / $res->limit);
+                $res->page      = floor($res->offset / $res->limit) + 1;
+            } elseif (preg_match('/\s+LIMIT\s+(\d+)/i', $sql, $match)) {
+                $res->limit     = $match[1];
+                $res->num_pages = 1;
+                $res->page      = 1;
+            } else {
+                $res->num_pages = 1;
+                $res->page      = 1;
+            }
             return $res;
         } else {
             if ($result) {
