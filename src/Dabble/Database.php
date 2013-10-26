@@ -178,6 +178,8 @@ class Database
      */
     public function insert_id()
     {
+        $this->open();
+
         return mysqli_insert_id($this->link);
     }
 
