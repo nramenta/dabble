@@ -97,6 +97,8 @@ class Database
      */
     public function select_db($database)
     {
+        $this->open();
+
         return mysqli_select_db($this->link, $database);
     }
 
