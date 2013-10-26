@@ -97,7 +97,7 @@ $params['tenant_id'] = $_SESSION['tenant_id'];
 if (isset($_GET['title'])) $params['title'] = '%' . $_GET['title'] . '%';
 
 $posts = $db->query(
-    'SELECT * FROM `posts` WHERE `tenant_id` = :tenant_id [AND title = :title]',
+    'SELECT * FROM `posts` WHERE `tenant_id` = :tenant_id [AND title LIKE :title]',
     $params
 );
 ```
