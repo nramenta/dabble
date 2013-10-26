@@ -356,22 +356,22 @@ class Database
 
         if (is_object($result)) {
             $res = new Result($result);
-            if (preg_match('/^\s*SELECT\s+SQL_CALC_FOUND_ROWS/i', $sql)) {
+            if (preg_match('/^(?:(?:EXPLAIN|DESC).+?)?SELECT(?:[A-Z_\s]+)?\s+SQL_CALC_FOUND_ROWS/i', $sql)) {
                 $res->found_rows = $this->found_rows();
             } else {
                 $res->found_rows = $res->num_rows;
             }
-            if (preg_match('/\s+LIMIT\s+(\d+)\s+OFFSET\s+(\d+)/i', $sql, $match)) {
+            if (preg_match('/\s+LIMIT\s+(\d+)\s+OFFSET\s+(\d+)(?:\s+(?:PROCEDURE|INTO|FOR|LOCK).+)?$/i', $sql, $match)) {
                 $res->limit     = $match[1];
                 $res->offset    = $match[2];
                 $res->num_pages = ceil($res->found_rows / $res->limit);
                 $res->page      = floor($res->offset / $res->limit) + 1;
-            } elseif (preg_match('/\s+LIMIT\s+(\d+)\s*,\s*(\d+)?/i', $sql, $match)) {
+            } elseif (preg_match('/\s+LIMIT\s+(\d+)\s*,\s*(\d+)(?:\s+(?:PROCEDURE|INTO|FOR|LOCK).+)?$/i', $sql, $match)) {
                 $res->limit     = $match[2];
                 $res->offset    = $match[1];
                 $res->num_pages = ceil($res->found_rows / $res->limit);
                 $res->page      = floor($res->offset / $res->limit) + 1;
-            } elseif (preg_match('/\s+LIMIT\s+(\d+)/i', $sql, $match)) {
+            } elseif (preg_match('/\s+LIMIT\s+(\d+)(?:\s+(?:PROCEDURE|INTO|FOR|LOCK).+)?$/i', $sql, $match)) {
                 $res->limit     = $match[1];
                 $res->num_pages = 1;
                 $res->page      = 1;
