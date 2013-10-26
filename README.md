@@ -102,7 +102,7 @@ $posts = $db->query(
 );
 ```
 
-In the above example, the `[AND title = :title]` part will be removed if
+In the above example, the `[AND title LIKE :title]` part will be removed if
 `$params['title']` does not exist. You can nest as many of these optional SQL
 fragments as you need. Unbalanced `[` and `]` delimiters is considered to be
 an error and will yield a `RuntimeException`.
