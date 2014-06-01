@@ -412,7 +412,7 @@ class Database
     /**
      * Returns the number of FOUND_ROWS() from the last query.
      *
-     * @param int
+     * @return int
      */
     protected function found_rows()
     {
