@@ -499,7 +499,7 @@ method as follows:
 ```php
 <?php
 $db->insert('posts', array(
-    'title'      => 'Hello, World',
+    'title'      => $db->literal('CONCAT(:a, :b)', array('a' => 'Hello, ', 'b' => 'World!')),
     'created_at' => $db->literal('NOW()')
 ));
 ```
@@ -507,12 +507,17 @@ $db->insert('posts', array(
 Will execute the SQL:
 
 ```
-INSERT INTO `posts` (`title`, `created_at`) VALUES ('Hello, World', NOW());
+INSERT INTO `posts` (`title`, `created_at`) VALUES (CONCAT('Hello, ', 'World'), NOW());
 ```
 
 Literal values will not be escaped. They will be inserted into the query as is.
 You may use literal helpers anywhere key-value arrays can be used as arguments
-to CRUD helper methods.
+to CRUD helper methods. As can be seen from the example above, you can pass a
+key-value array as the second argument to `Database::literal()` so that it will
+safely replace all placeholders found in the literal string with the values in
+the array before marking it as a literal and returning a `Literal` object. This
+way you can still use the CRUD helper methods to construct quite complicated
+inserts or updates without resolving to the `Database::query()` method.
 
 ### Truncate
 

@@ -338,13 +338,14 @@ class Database
      * Returns a Literal object to mark a string value so that it should not be
      * escaped.
      *
-     * @param $value The literal object
+     * @param string $string   The literal string
+     * @param array  $bindings Optional bindings for the literal string
      *
      * @return Literal A Literal object
      */
-    public function literal($value)
+    public function literal($string, array $bindings = array())
     {
-        return new Literal((string) $value);
+        return new Literal($this->format((string) $string, $bindings));
     }
 
     /**
