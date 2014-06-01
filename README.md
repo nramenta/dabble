@@ -355,7 +355,7 @@ Updates a row in a table. Returns `true` on success, `false` otherwise.
 
 Parameters:
 - `$table`: The table name.
-- `$data`: The row array to insert.
+- `$data`: The row array to update.
 - `$where`: Where-clause; can contain placeholders.
 - `$args`: Array of key-value bindings for the where-clause.
 
