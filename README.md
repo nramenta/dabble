@@ -490,6 +490,30 @@ Will execute the SQL:
 REPLACE INTO `posts` (`id`, `title`, `body`) VALUES (1, 'Override', 'test.');
 ```
 
+### Literal parameters
+
+Sometimes it is necessary to pass literal strings as part of a key-value array
+argument for the various CRUD methods above. Use the `Database::literal()`
+method as follows:
+
+```php
+<?php
+$db->insert('posts', array(
+    'title'      => 'Hello, World',
+    'created_at' => $db->literal('NOW()')
+));
+```
+
+Will execute the SQL:
+
+```
+INSERT INTO `posts` (`title`, `created_at`) VALUES ('Hello, World', NOW());
+```
+
+Literal values will not be escaped. They will be inserted into the query as is.
+You may use literal helpers anywhere key-value arrays can be used as arguments
+to CRUD helper methods.
+
 ### Truncate
 
 Truncates a table. Returns `true` on success, `false` otherwise.

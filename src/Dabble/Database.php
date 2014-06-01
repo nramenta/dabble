@@ -9,6 +9,7 @@
 namespace Dabble;
 
 use Dabble\Result;
+use Dabble\Literal;
 
 /**
  * Main database class
@@ -326,9 +327,20 @@ class Database
                 $replace[] = implode(
                     ',', array_map($strtr, $this->escape($value, true))
                 );
+            } elseif ($value instanceof Literal) {
+                $replace[] = $value->__toString();
             }
         }
         return preg_replace($search, $replace, $sql);
+    }
+
+    /**
+     * Returns a Literal object to mark a string value so that it should not be
+     * escaped.
+     */
+    public function literal($value)
+    {
+        return new Literal((string) $value);
     }
 
     /**
