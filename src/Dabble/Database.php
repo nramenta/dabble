@@ -337,6 +337,10 @@ class Database
     /**
      * Returns a Literal object to mark a string value so that it should not be
      * escaped.
+     *
+     * @param $value The literal object
+     *
+     * @return Literal A Literal object
      */
     public function literal($value)
     {
