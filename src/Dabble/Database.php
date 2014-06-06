@@ -185,7 +185,11 @@ class Database
     }
 
     /**
-     * Escapes data using mysqli_escape_string.
+     * Escapes data using mysqli_escape_string. Traversable objects will be
+     * converted into arrays. Literal objects will return their literal values.
+     * Any other objects will be cast into arrays using `(array)`. If the second
+     * parameter is `true`, then returned values will be SQL-friendly meaning
+     * they can be inserted straight into queries as is.
      *
      * @param mixed $data   The data to be escaped
      * @param bool  $sqlize Format data as SQL-friendly, defaults to false
@@ -203,7 +207,7 @@ class Database
         if (is_object($data)) {
             if ($data instanceof \Traversable) {
                 $data = iterator_to_array($data);
-            } else {
+            } elseif (!($data instanceof Literal)) {
                 $data = (array) $data;
             }
         }
@@ -224,6 +228,8 @@ class Database
             } else {
                 return $data;
             }
+        } elseif ($data instanceof Literal) {
+            return $data->__toString();
         } elseif (is_array($data)) {
             $sqlized = array();
             foreach ($data as $i => $datum) {
@@ -317,8 +323,9 @@ class Database
                     array('\\' => '\\\\', '$' => '\$')
                 );
             } elseif (is_array($value)) {
-                foreach ($value as $element) {
-                    if (!is_scalar($element) && !is_null($element)) {
+                foreach ($value as $i => $element) {
+                    if (!is_scalar($element) && !is_null($element) &&
+                        !($element instanceof Literal)) {
                         throw new \RuntimeException(
                             'could not format non-scalar value'
                         );
@@ -327,8 +334,6 @@ class Database
                 $replace[] = implode(
                     ',', array_map($strtr, $this->escape($value, true))
                 );
-            } elseif ($value instanceof Literal) {
-                $replace[] = $value->__toString();
             }
         }
         return preg_replace($search, $replace, $sql);
