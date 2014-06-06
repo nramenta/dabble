@@ -231,11 +231,11 @@ class Database
         } elseif ($data instanceof Literal) {
             return $data->__toString();
         } elseif (is_array($data)) {
-            $sqlized = array();
+            $escaped = array();
             foreach ($data as $i => $datum) {
-                $sqlized[$i] = $this->escape($datum, $sqlize);
+                $escaped[$i] = $this->escape($datum, $sqlize);
             }
-            return $sqlized;
+            return $escaped;
         } else {
             throw new \InvalidArgumentException(
                 'supplied data is not supported'
