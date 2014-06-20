@@ -551,7 +551,7 @@ class Database
                 $updates = array();
                 foreach ($update as $column => $value) {
                     $updates[] = is_null($value) ?
-                        "`$column IS NULL`" : "`$column` = :$column";
+                        "`$column` IS NULL" : "`$column` = :$column";
                     $args[$column] = $value;
                 }
                 $update = implode(', ', $updates);
