@@ -330,6 +330,24 @@ class Result implements \Countable, \Iterator
     }
 
     /**
+     * Runs a user-provided callback with the MySQLi_Result object given as
+     * argument and returns the result, or returns the MySQLi_Result object if
+     * called without an argument.
+     *
+     * @param callable $callback User-provided callback (optional)
+     *
+     * @return mixed|MySQLi_Result
+     */
+    public function __invoke($callback = null)
+    {
+        if (isset($callback)) {
+            return call_user_func($callback, $this->result);
+        } else {
+            return $this->result;
+        }
+    }
+
+    /**
      * Object destructor.
      */
     public function __destruct()
