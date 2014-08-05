@@ -448,6 +448,36 @@ class Database
     }
 
     /**
+     * A quick and simple way to select all columns from a table according to a
+     * where clause. The where clauses are all joined with AND.
+     *
+     * @param string $table Table name
+     * @param string $where Where-clause; can contain placeholders
+     * @param array  $args  Array of key-value bindings for the where-clause
+     *
+     * @return Result|bool
+     */
+    public function select($table, $where = null, array $args = array())
+    {
+        if (isset($where)) {
+            if (is_array($where)) {
+                $conditions = array();
+                foreach ($where as $column => $value) {
+                    $conditions[] = is_null($value) ?
+                        "`$column` IS NULL" : "`$column` = :$column";
+                    $args[$column] = $value;
+                }
+                $where = implode(' AND ', $conditions);
+            }
+            $sql = "SELECT * FROM `$table` WHERE $where";
+        } else {
+            $sql = "SELECT * FROM `$table`";
+        }
+
+        return $this->query($sql, $args);
+    }
+
+    /**
      * Helper method to insert a row.
      *
      * @param string $table     Table name

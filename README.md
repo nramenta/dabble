@@ -313,6 +313,36 @@ $name = $result->last('name');
 
 ## CRUD helpers
 
+### Select
+
+Selects rows from a table according to a where clause.
+
+Parameters:
+- `$table`: The table name.
+- `$where`: Where-clause; can contain placeholders.
+- `$args`: Array of key-value bindings for the where-clause.
+
+The following:
+
+```php
+<?php
+$db->select('posts', 'published = :published', array('published' => true));
+```
+
+Will execute the SQL:
+
+```
+SELECT * FROM `posts` WHERE `published` = 1;
+```
+
+The `$where` parameter can also be an array of simple key-value comparisons. The
+following is equivalent to the above:
+
+```php
+<?php
+$db->select('posts', array('published' => true));
+```
+
 ### Insert
 
 Inserts a row into a table. Returns `true` on success, `false` otherwise.
