@@ -322,6 +322,8 @@ class Database
                     $this->escape($value, true),
                     array('\\' => '\\\\', '$' => '\$')
                 );
+            } elseif ($value instanceof Literal) {
+                $replace[] = $this->escape($value);
             } elseif (is_array($value)) {
                 foreach ($value as $i => $element) {
                     if (!is_scalar($element) && !is_null($element) &&
