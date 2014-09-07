@@ -571,6 +571,11 @@ TRUNCATE `posts`;
 ALTER TABLE `posts` AUTO_INCREMENT = 1;
 ```
 
+## Unit Tests
+
+To run the accompanying phpunit unit tests, you will need to provide a database
+connection in the phpunit.xml file (please see the phpunit.xml.dist file).
+
 ## License
 
 Dabble is released under the [MIT License][MIT].
