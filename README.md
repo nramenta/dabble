@@ -127,6 +127,19 @@ try {
 
 Any SQL errors between `begin()` and `commit()` will yield a `RuntimeException`.
 
+You can also use the `Database::transact()` method. The following is equivalent
+to the above:
+
+```php
+<?php
+$db->transact(function($db) {
+    $db->query('UPDATE `users` SET `bal` = `bal` - :amount WHERE id = :id',
+        array('amount' => 100, 'id' => 1));
+    $db->query('UPDATE `users` SET `bal` = `bal` + :amount WHERE id = :id',
+        array('amount' => 100, 'id' => 2));
+});
+```
+
 ## Result querying
 
 ### num_rows

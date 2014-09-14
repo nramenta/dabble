@@ -49,6 +49,24 @@ class DatabaseTest extends Dabble_TestCase
         $this->assertTrue($after == $before);
     }
 
+    public function testTransaction()
+    {
+        $this->assertTrue($this->db->transact(function($db) {
+            $db->insert('post', array(
+                'title' => 'post' . mt_rand(),
+                'body' => 'lolzors!',
+            ));
+        }));
+
+        $this->assertFalse($this->db->transact(function($db) {
+            throw new \Exception;
+        }));
+
+        $this->assertFalse($this->db->transact(function($db) {
+            $db->begin();
+        }));
+    }
+
     /**
      * @expectedException \LogicException
      */

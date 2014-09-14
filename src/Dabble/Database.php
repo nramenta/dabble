@@ -173,6 +173,25 @@ class Database
     }
 
     /**
+     * Execute a callback inside a transaction.
+     *
+     * @param callback $callback The callback to run inside the transaction
+     *
+     * @return bool Boolean true on success, false otherwise
+     */
+    public function transact($callback)
+    {
+        try {
+            $this->begin();
+            call_user_func($callback, $this);
+            return $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            return false;
+        }
+    }
+
+    /**
      * Returns last insert ID.
      *
      * @return int
