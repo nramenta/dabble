@@ -131,6 +131,17 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(3, $result->found_rows);
     }
 
+    public function testPagination()
+    {
+        $result = $this->db->query("SELECT SQL_CALC_FOUND_ROWS * FROM `post` LIMIT 2 OFFSET 0");
+        $this->assertEquals(1, $result->page);
+        $this->assertEquals(2, $result->num_pages);
+
+        $result = $this->db->query("SELECT SQL_CALC_FOUND_ROWS * FROM `post` LIMIT 2 OFFSET 2");
+        $this->assertEquals(2, $result->page);
+        $this->assertEquals(2, $result->num_pages);
+    }
+
     public function testIterator()
     {
         $result = $this->db->query('SELECT * FROM `post`');
