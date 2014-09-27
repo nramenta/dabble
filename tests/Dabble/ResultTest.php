@@ -111,6 +111,54 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(3, $result->last('id'));
     }
 
+    public function testSlice()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+        $slice = $result->slice(1);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(2, count($slice));
+        $this->assertEquals(3, $slice[1]['id']);
+
+        $slice = $result->slice(-1);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(1, count($slice));
+        $this->assertEquals(3, $slice[0]['id']);
+
+        $slice = $result->slice();
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(3, count($slice));
+        $this->assertEquals(2, $slice[1]['id']);
+
+        $slice = $result->slice(0, 100);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(3, count($slice));
+        $this->assertEquals(2, $slice[1]['id']);
+
+        $slice = $result->slice(-100, 100);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(3, count($slice));
+        $this->assertEquals(2, $slice[1]['id']);
+
+        $slice = $result->slice(-100);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(3, count($slice));
+        $this->assertEquals(2, $slice[1]['id']);
+
+        $slice = $result->slice(100, 100);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(0, count($slice));
+
+        $slice = $result->slice(1, 1);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(1, count($slice));
+        $this->assertEquals(2, $slice[0]['id']);
+
+        $slice = $result->slice(1, 1, true);
+        $this->assertTrue(is_array($slice));
+        $this->assertEquals(1, count($slice));
+        $this->assertEquals(2, $slice[1]['id']);
+    }
+
     public function testCount()
     {
         $result = $this->db->query('SELECT * FROM `post`');

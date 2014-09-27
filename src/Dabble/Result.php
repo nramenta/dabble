@@ -240,6 +240,33 @@ class Result implements \Countable, \Iterator
         return $last;
     }
 
+    public function slice($offset = 0, $length = null, $preserve_keys = false)
+    {
+        $slice = array();
+        $offset = (int) $offset;
+
+        if ($offset < 0) {
+            if (abs($offset) > $this->num_rows) {
+                $offset = 0;
+            } else {
+                $offset = $this->num_rows - abs($offset);
+            }
+        }
+
+        $length = isset($length) ? (int) $length : $this->num_rows;
+
+        $n = 0;
+        for ($i = $offset; $i < $this->num_rows && $n < $length; $i++) {
+            if ($preserve_keys) {
+                $slice[$i] = $this->fetch($i);
+            } else {
+                $slice[] = $this->fetch($i);
+            }
+            $n += 1;
+        }
+        return $slice;
+    }
+
     /**
      * Countable interface implementation.
      *

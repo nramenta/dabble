@@ -324,6 +324,21 @@ Pass a column name as argument to return a single column from the last row:
 $name = $result->last('name');
 ```
 
+### slice
+
+Returns a slice of rows from the result:
+
+```php
+<?php
+$slice = $result->slice(1, 10);
+```
+
+The above will return 10 rows skipping the first one. The first parameter is the
+zero-based offset; the second parameter is the number of elements; the third
+parameter is a boolean value to indicate whether to preserve the keys or not
+(optional and defaults to false). This methods essentially behaves the same as
+PHP's built-in `array_slice()` function.
+
 ## CRUD helpers
 
 ### Select
