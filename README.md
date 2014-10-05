@@ -339,6 +339,21 @@ parameter is a boolean value to indicate whether to preserve the keys or not
 (optional and defaults to false). This methods essentially behaves the same as
 PHP's built-in `array_slice()` function.
 
+### map
+
+Sets a mapper callback function that's used inside the `Result::fetch` method:
+
+```php
+<?php
+$result->map(function($row) {
+    return (object) $row;
+});
+$objects = $result->fetch_all();
+```
+
+The above example will map all rows returned as arrays from the result set to
+objects. Set the mapper callback function to null to disable it.
+
 ## CRUD helpers
 
 ### Select

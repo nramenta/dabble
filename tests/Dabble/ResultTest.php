@@ -229,5 +229,23 @@ class ResultTest extends Dabble_TestCase
         });
         $this->assertEquals(3, count($ids));
     }
+
+    public function testMap()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+
+        $row = $result->fetch(0);
+        $this->assertFalse($row instanceof \stdClass);
+
+        $result->map(function($row) {
+            return (object) $row;
+        });
+        $row = $result->fetch(0);
+        $this->assertTrue($row instanceof \stdClass);
+
+        $result->map(null);
+        $row = $result->fetch(0);
+        $this->assertFalse($row instanceof \stdClass);
+    }
 }
 

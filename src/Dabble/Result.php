@@ -16,6 +16,8 @@ class Result implements \Countable, \Iterator
     protected $result;
     protected $row;
 
+    protected $mapper;
+
     public $num_rows;
     public $found_rows;
 
@@ -27,12 +29,15 @@ class Result implements \Countable, \Iterator
     /**
      * Object constructor.
      *
-     * @param mixed $result Resource returned by db::query or mysqli_query
+     * @param mixed $result    Resource returned by db::query or mysqli_query
+     * @param callable $mapper Optional callback mapper for the fetch method
      */
-    public function __construct(\MySQLi_Result $result)
+    public function __construct(\MySQLi_Result $result, $mapper = null)
     {
         $this->result = $result;
         $this->row = 0;
+
+        $this->mapper = $mapper;
 
         $this->num_rows = mysqli_num_rows($result);
     }
@@ -72,6 +77,12 @@ class Result implements \Countable, \Iterator
         }
     }
 
+    public function map($callable)
+    {
+        $this->mapper = $callable;
+        return $this;
+    }
+
     /**
      * Fetches a row or a single column within a row. Returns null if there are
      * no more rows in the result.
@@ -97,7 +108,8 @@ class Result implements \Countable, \Iterator
             return is_array($row) && isset($row[$column]) ?
                 $row[$column] : null;
         } else {
-            return $row;
+            return is_callable($this->mapper) ?
+                call_user_func($this->mapper, $row) : $row;
         }
     }
 
