@@ -11,7 +11,7 @@ namespace Dabble;
 /**
  * Database result class
  */
-class Result implements \Countable, \Iterator
+class Result implements \Countable, \SeekableIterator
 {
     protected $result;
     protected $row;
@@ -43,7 +43,8 @@ class Result implements \Countable, \Iterator
     }
 
     /**
-     * Moves the internal pointer to the specified row position.
+     * Moves the internal pointer to the specified row position. May throw an
+     * OutOfBoundsException.
      *
      * @param int $row Row position; zero-based and set to 0 by default
      *
@@ -51,10 +52,10 @@ class Result implements \Countable, \Iterator
      */
     public function seek($row = 0)
     {
-        if (is_int($row) && $row >= 0 && $row <= $this->num_rows - 1) {
+        if (is_int($row) && $row >= 0 && $row < $this->num_rows) {
             return mysqli_data_seek($this->result, $row);
         } else {
-            return false;
+            throw new \OutOfBoundsException("invalid seek position ($row)");
         }
     }
 

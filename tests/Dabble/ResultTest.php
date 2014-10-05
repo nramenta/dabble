@@ -17,6 +17,24 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(1, $result->fetch(null, 'id'));
     }
 
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testSeek2()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+        $result->seek(3);
+    }
+
+    /**
+     * @expectedException \OutOfBoundsException
+     */
+    public function testSeek3()
+    {
+        $result = $this->db->query('SELECT * FROM `post` WHERE id > 100');
+        $result->seek();
+    }
+
     public function testFetchFields()
     {
         $result = $this->db->query('SELECT * FROM `post`');
