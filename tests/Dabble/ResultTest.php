@@ -228,6 +228,32 @@ class ResultTest extends Dabble_TestCase
         }
     }
 
+    public function testArrayAccess()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+        $this->assertTrue(isset($result[0]));
+        $this->assertTrue(is_array($result[0]));
+        $this->assertEquals($result[0]['id'], 1);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testArrayAccess2()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+        $result[0] = array('id' => 1);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testArrayAccess3()
+    {
+        $result = $this->db->query('SELECT * FROM `post`');
+        unset($result[1]);
+    }
+
     public function testFree()
     {
         $result = $this->db->query('SELECT * FROM `post`');

@@ -11,7 +11,7 @@ namespace Dabble;
 /**
  * Database result class
  */
-class Result implements \Countable, \SeekableIterator
+class Result implements \Countable, \SeekableIterator, \ArrayAccess
 {
     protected $result;
     protected $row;
@@ -352,6 +352,50 @@ class Result implements \Countable, \SeekableIterator
     public function valid()
     {
         return $this->row < $this->num_rows;
+    }
+
+    /**
+     * ArrayAccess interface implementation.
+     *
+     * @param int $offset Offset number
+     *
+     * @return bool Boolean true if offset exists, false otherwise
+     */
+    public function offsetExists($offset)
+    {
+        return is_int($offset) && $offset >= 0 && $offset < $this->num_rows;
+    }
+
+    /**
+     * ArrayAccess interface implementation.
+     *
+     * @param int $offset Offset number
+     *
+     * @return mixed
+     */
+    public function offsetGet($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            return $this->fetch($offset);
+        } else {
+            throw new \OutOfBoundsException("undefined offset ($offset)");
+        }
+    }
+
+    /**
+     * ArrayAccess interface implementation. Not implemented by design.
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \LogicException('trying to change result item');
+    }
+
+    /**
+     * ArrayAccess interface implementation. Not implemented by design.
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \LogicException('trying to unset result item');
     }
 
     /**
