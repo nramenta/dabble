@@ -8,9 +8,18 @@ use Dabble\Result;
  */
 class ResultTest extends Dabble_TestCase
 {
-    public function testSeek()
+    public function testResult()
     {
-        $result = $this->db->query('SELECT * FROM `post`');
+        $result = $this->db->query('SELECT * FROM `post` ORDER BY `id` ASC');
+        $this->assertTrue($result instanceof Result);
+        return $result;
+    }
+
+    /**
+     * @depends testResult
+     */
+    public function testSeek($result)
+    {
         $result->seek(1);
         $this->assertEquals(2, $result->fetch(null, 'id'));
         $result->seek();
@@ -18,11 +27,11 @@ class ResultTest extends Dabble_TestCase
     }
 
     /**
+     * @depends testResult
      * @expectedException \OutOfBoundsException
      */
-    public function testSeek2()
+    public function testSeek2($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $result->seek(3);
     }
 
@@ -35,33 +44,43 @@ class ResultTest extends Dabble_TestCase
         $result->seek();
     }
 
-    public function testFetchFields()
+    /**
+     * @depends testResult
+     */
+    public function testFetchFields($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $fields = $result->fetch_fields(true);
         $this->assertTrue(is_array($fields));
         $this->assertEquals(5, count($fields));
     }
 
-    public function testFetch()
+    /**
+     * @depends testResult
+     */
+    public function testFetch($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
+        $result->seek();
         $this->assertTrue(is_array($result->fetch()));
         $this->assertEquals(2, $result->fetch(null, 'id'));
         $this->assertEquals(3, $result->fetch(2, 'id'));
     }
 
-    public function testFetchOne()
+    /**
+     * @depends testResult
+     */
+    public function testFetchOne($result)
     {
-        $result = $this->db->query('SELECT * FROM `post` LIMIT 1');
+        $result->seek();
         $this->assertTrue(is_array($result->fetch_one()));
         $result->seek();
         $this->assertEquals(1, $result->fetch_one('id'));
     }
 
-    public function testFetchAll()
+    /**
+     * @depends testResult
+     */
+    public function testFetchAll($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $posts = $result->fetch_all();
         $this->assertTrue(is_array($posts));
         $this->assertEquals(3, count($posts));
@@ -71,10 +90,11 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(3, count($posts));
     }
 
-    public function testFetchTranspose()
+    /**
+     * @depends testResult
+     */
+    public function testFetchTranspose($result)
     {
-        $result = $this->db->query('SELECT * FROM `post` ORDER BY `id` ASC');
-
         $transposed = $result->fetch_transpose();
         $this->assertEquals(5, count($transposed));
         foreach ($transposed as $column => $rows) {
@@ -88,10 +108,11 @@ class ResultTest extends Dabble_TestCase
         }
     }
 
-    public function testFetchPairs()
+    /**
+     * @depends testResult
+     */
+    public function testFetchPairs($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
-
         $pairs = $result->fetch_pairs('id');
         foreach ($pairs as $id => $row) {
             $this->assertEquals($id, $row['id']);
@@ -103,9 +124,11 @@ class ResultTest extends Dabble_TestCase
         }
     }
 
-    public function testFetchGroups()
+    /**
+     * @depends testResult
+     */
+    public function testFetchGroups($result)
     {
-        $result = $this->db->query('SELECT * FROM `post` ORDER BY `id` ASC');
         $groups = $result->fetch_groups('id');
         foreach ($groups as $id => $group) {
             $this->assertEquals(1, count($group));
@@ -115,23 +138,29 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(array(1 => array('Title #1'), 2 => array('Title #2'), 3 => array('Title #3')), $groups);
     }
 
-    public function testFirst()
+    /**
+     * @depends testResult
+     */
+    public function testFirst($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $this->assertTrue(is_array($result->first()));
         $this->assertEquals(1, $result->first('id'));
     }
 
-    public function testLast()
+    /**
+     * @depends testResult
+     */
+    public function testLast($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $this->assertTrue(is_array($result->last()));
         $this->assertEquals(3, $result->last('id'));
     }
 
-    public function testSlice()
+    /**
+     * @depends testResult
+     */
+    public function testSlice($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $slice = $result->slice(1);
         $this->assertTrue(is_array($slice));
         $this->assertEquals(2, count($slice));
@@ -177,16 +206,20 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(2, $slice[1]['id']);
     }
 
-    public function testCount()
+    /**
+     * @depends testResult
+     */
+    public function testCount($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $this->assertEquals(3, $result->count());
         $this->assertEquals(3, count($result));
     }
 
-    public function testNumRows()
+    /**
+     * @depends testResult
+     */
+    public function testNumRows($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $this->assertEquals(3, $result->num_rows());
         $this->assertEquals(3, $result->num_rows);
     }
@@ -208,17 +241,21 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(2, $result->num_pages);
     }
 
-    public function testIterator()
+    /**
+     * @depends testResult
+     */
+    public function testIterator($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         foreach ($result as $row) {
             $this->assertTrue(is_array($row));
         }
     }
 
-    public function testFetchInIterator()
+    /**
+     * @depends testResult
+     */
+    public function testFetchInIterator($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         foreach ($result as $i => $row) {
             $this->assertEquals($i + 1, $row['id']);
             $this->assertEquals(3, count($result->fetch_all()));
@@ -228,29 +265,31 @@ class ResultTest extends Dabble_TestCase
         }
     }
 
-    public function testArrayAccess()
+    /**
+     * @depends testResult
+     */
+    public function testArrayAccess($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $this->assertTrue(isset($result[0]));
         $this->assertTrue(is_array($result[0]));
         $this->assertEquals($result[0]['id'], 1);
     }
 
     /**
+     * @depends testResult
      * @expectedException \LogicException
      */
-    public function testArrayAccess2()
+    public function testArrayAccess2($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         $result[0] = array('id' => 1);
     }
 
     /**
+     * @depends testResult
      * @expectedException \LogicException
      */
-    public function testArrayAccess3()
+    public function testArrayAccess3($result)
     {
-        $result = $this->db->query('SELECT * FROM `post`');
         unset($result[1]);
     }
 
@@ -263,6 +302,7 @@ class ResultTest extends Dabble_TestCase
     public function testInvoke()
     {
         $result = $this->db->query('SELECT * FROM `post`');
+
         $this->assertTrue($result() instanceof \MySQLi_Result);
 
         $ids = array();
