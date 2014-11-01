@@ -28,20 +28,16 @@ class ResultTest extends Dabble_TestCase
 
     /**
      * @depends testResult
-     * @expectedException \OutOfBoundsException
      */
     public function testSeek2($result)
     {
-        $result->seek(3);
+        $this->assertFalse($result->seek(3));
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testSeek3()
     {
         $result = $this->db->query('SELECT * FROM `post` WHERE id > 100');
-        $result->seek();
+        $this->assertFalse($result->seek());
     }
 
     /**
@@ -147,6 +143,12 @@ class ResultTest extends Dabble_TestCase
         $this->assertEquals(1, $result->first('id'));
     }
 
+    public function testFirst2()
+    {
+        $result = $this->db->query('SELECT * FROM `post` WHERE id > 100');
+        $this->assertNull($result->first());
+    }
+
     /**
      * @depends testResult
      */
@@ -154,6 +156,12 @@ class ResultTest extends Dabble_TestCase
     {
         $this->assertTrue(is_array($result->last()));
         $this->assertEquals(3, $result->last('id'));
+    }
+
+    public function testLast2()
+    {
+        $result = $this->db->query('SELECT * FROM `post` WHERE id > 100');
+        $this->assertNull($result->last());
     }
 
     /**

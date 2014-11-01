@@ -43,8 +43,7 @@ class Result implements \Countable, \SeekableIterator, \ArrayAccess
     }
 
     /**
-     * Moves the internal pointer to the specified row position. May throw an
-     * OutOfBoundsException.
+     * Moves the internal pointer to the specified row position.
      *
      * @param int $row Row position; zero-based and set to 0 by default
      *
@@ -55,7 +54,7 @@ class Result implements \Countable, \SeekableIterator, \ArrayAccess
         if (is_int($row) && $row >= 0 && $row < $this->num_rows) {
             return mysqli_data_seek($this->result, $row);
         } else {
-            throw new \OutOfBoundsException("invalid seek position ($row)");
+            return false;
         }
     }
 
