@@ -53,6 +53,20 @@ The full constructor parameters are:
 - `$charset`: Server connection character set; defaults to utf8.
 - `$port`: Server connection port; defaults to 3306.
 - `$socket`: Server connection socket, optional.
+- `$ssl`: Use SSL connection, optional.
+- `$clientkey `:  clientkey file, mandatory if `$ssl == true`
+- `$clientcert`:  clientcert file, mandatory if `$ssl == true`
+- `$cacert`: cacert file, mandatory if `$ssl == true`
+
+Connect via SSL:
+
+```php
+$db = new Database('localhost', 'user', 'pass', 'test', 'utf8', '3306', null, 
+    true, '/etc/ssl/clientkey.pem',  '/etc/ssl/clientcert.pem',  
+    '/etc/ssl/cacert.pem'
+);
+
+```
 
 While the `query()` method's parameters are:
 - `$sql`: SQL string.

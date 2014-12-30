@@ -24,6 +24,10 @@ class Database
     protected $charset;
     protected $port;
     protected $socket;
+    protected $ssl;
+    protected $clientkey;
+    protected $clientcert;
+    protected $cacert;
 
     protected $transaction = false;
 
@@ -36,16 +40,21 @@ class Database
     /**
      * Object constructor.
      *
-     * @param string $host     Server hostname or IP address
-     * @param string $username Server username
-     * @param string $password Server password
-     * @param string $database Database name
-     * @param string $charset  Server connection character set
-     * @param int    $port     Server connection port
-     * @param string $socket   Server connection socket
+     * @param string $host        Server hostname or IP address
+     * @param string $username    Server username
+     * @param string $password    Server password
+     * @param string $database    Database name
+     * @param string $charset     Server connection character set
+     * @param int    $port        Server connection port
+     * @param string $socket      Server connection socket
+     * @param boolean $ssl        Use SSL connection
+     * @param string $clientkey   clientkey file
+     * @param string $clientcert  clientcert file
+     * @param string $cacert      cacert file
      */
     public function __construct($host, $username, $password, $database,
-        $charset = 'utf8', $port = 3306, $socket = null)
+        $charset = 'utf8', $port = 3306, $socket = null, $ssl = false, 
+        $clientkey = '', $clientcert = '', $cacert = '')
     {
         $this->link     = null;
         $this->host     = $host;
@@ -55,6 +64,9 @@ class Database
         $this->charset  = $charset;
         $this->port     = $port;
         $this->socket   = $socket;
+        $this->cacert   = $cacert;
+        $this->clientcert = $clientcert;
+        $this->clientkey = $clientkey;
     }
 
     /**
@@ -68,9 +80,25 @@ class Database
             return true;
         }
 
-        $this->link = mysqli_connect($this->host, $this->username,
-            $this->password, $this->database, $this->port, $this->socket);
-
+        if ($this->ssl == true) {
+            if (empty($this->clientcert)) 
+                throw new \RuntimeException("clientcert not defined");
+            if (empty($this->clientkey)) 
+                throw new \RuntimeException("clientkey not defined");
+            if (empty($this->cacert)) 
+                throw new \RuntimeException("cacert not defined");
+            
+            $this->link = mysqli_init();
+            $this->link->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
+            $this->link->ssl_set($this->clientkey, $this->clientcert, 
+                $this->cacert, NULL, NULL);
+            $this->link->real_connect($this->host, $this->username,
+                $this->password, $this->database, $this->port, $this->socket, 
+                MYSQLI_CLIENT_SSL);
+        } else {
+            $this->link = mysqli_connect($this->host, $this->username,
+                $this->password, $this->database, $this->port, $this->socket);
+        }
         if (mysqli_connect_errno()) {
             throw new \RuntimeException(sprintf(
                 'could not connect to %s : (%d) %s',
