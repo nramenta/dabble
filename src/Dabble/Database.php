@@ -64,6 +64,7 @@ class Database
         $this->charset  = $charset;
         $this->port     = $port;
         $this->socket   = $socket;
+        $this->ssl      = $ssl;
         $this->cacert   = $cacert;
         $this->clientcert = $clientcert;
         $this->clientkey = $clientkey;
