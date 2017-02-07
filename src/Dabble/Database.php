@@ -53,7 +53,7 @@ class Database
      * @param string $cacert      cacert file
      */
     public function __construct($host, $username, $password, $database,
-        $charset = 'utf8', $port = 3306, $socket = null, $ssl = false, 
+        $charset = 'utf8', $port = 3306, $socket = null, $ssl = false,
         $clientkey = '', $clientcert = '', $cacert = '')
     {
         $this->link     = null;
@@ -82,19 +82,19 @@ class Database
         }
 
         if ($this->ssl == true) {
-            if (empty($this->clientcert)) 
+            if (empty($this->clientcert))
                 throw new \RuntimeException("clientcert not defined");
-            if (empty($this->clientkey)) 
+            if (empty($this->clientkey))
                 throw new \RuntimeException("clientkey not defined");
-            if (empty($this->cacert)) 
+            if (empty($this->cacert))
                 throw new \RuntimeException("cacert not defined");
-            
+
             $this->link = mysqli_init();
             $this->link->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
-            $this->link->ssl_set($this->clientkey, $this->clientcert, 
+            $this->link->ssl_set($this->clientkey, $this->clientcert,
                 $this->cacert, NULL, NULL);
             $this->link->real_connect($this->host, $this->username,
-                $this->password, $this->database, $this->port, $this->socket, 
+                $this->password, $this->database, $this->port, $this->socket,
                 MYSQLI_CLIENT_SSL);
         } else {
             $this->link = mysqli_connect($this->host, $this->username,
