@@ -1,11 +1,4 @@
 <?php
-/**
- * Dabble - A lightweight wrapper and collection of helpers for MySQLi.
- *
- * @author  Nofriandi Ramenta <nramenta@gmail.com>
- * @license http://en.wikipedia.org/wiki/MIT_License MIT
- */
-
 namespace Dabble;
 
 use Dabble\Result;
